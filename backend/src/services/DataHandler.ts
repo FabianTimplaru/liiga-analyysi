@@ -31,6 +31,7 @@ export class DataHandler {
     }
 
     // Inserts an array of Match objects into the database
+    // The ON CONFLICT clause ensures that if a match with the same date, home team, and away team already exists, it will be skipped
     static insertMatches(matches: Match[]): void {
         const insertStatement = db.prepare(`
             INSERT INTO matches(
@@ -44,6 +45,7 @@ export class DataHandler {
             attendance
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(date, home_team, away_team) DO NOTHING
             `);
 
         const transaction = db.transaction((items: Match[]) => {

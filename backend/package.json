@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
+    "dev": "tsx watch src/App.ts",
     "build": "tsc",
-    "start": "node dist/main.js"
+    "start": "node dist/App.js",
+    "db:seed": "tsx src/scripts/seedDb.ts"
   },
   "keywords": [],
   "type": "commonjs",

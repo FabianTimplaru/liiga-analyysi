@@ -1,5 +1,6 @@
 import { db } from "./database";
 
+// Initializes the database by creating the matches table if it doesn't exist
 export const initDb = () => {
     db.exec(`CREATE TABLE IF NOT EXISTS matches (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

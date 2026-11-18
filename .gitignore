@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Compiled files
+dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# SQLite generated databases
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Logs
+*.log

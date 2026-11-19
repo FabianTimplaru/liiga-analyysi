@@ -33,6 +33,18 @@ app.get('/api/matches/:id', (req: Request, res: Response) => {
     return res.status(200).json(match);
 });
 
+// GET all teams
+app.get('/api/teams', (req: Request, res: Response) => {
+    const teams = instance.getTeams();
+    res.status(200).json(teams);
+});
+
+// GET wins by team in descending order
+app.get('/api/stats/wins', (req: Request, res: Response) => {
+    const teamWins = instance.getTeamWins();
+    res.status(200).json(teamWins);
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

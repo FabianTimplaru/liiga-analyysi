@@ -2,6 +2,8 @@ import type { MatchReader } from './MatchReader';
 import type { Match } from '../models/Match';
 import { db } from '../db/database';
 import type { TeamWins } from '../models/TeamWins';
+import { AttendanceStats } from '../models/AttendanceStats';
+import { RefereeStats } from '../models/RefereeStats';
 
 export class SqliteMatchReader implements MatchReader {
     getAllMatches(): Match[] {
@@ -38,5 +40,40 @@ export class SqliteMatchReader implements MatchReader {
             ORDER BY wins DESC
             `).all() as TeamWins[];
         return teamWins;
+    }
+
+    getAttendanceStats(): AttendanceStats | undefined {
+        const attendanceStats = db.prepare(`
+            SELECT 
+            ROUND(AVG(attendance)) AS average,
+            MIN(attendance) AS lowest,
+            MAX(attendance) AS highest
+            FROM matches HAVING COUNT(*) > 0
+            `).get() as Pick<AttendanceStats, 'average' | 'lowest' | 'highest'> | undefined;
+
+        if (!attendanceStats) {
+            return undefined;
+        }
+
+        const lowestMatch = db.prepare(`
+            SELECT * FROM matches ORDER BY attendance ASC LIMIT 1
+            `).get() as Match;
+        const highestMatch = db.prepare(`
+            SELECT * FROM matches ORDER BY attendance DESC LIMIT 1
+            `).get() as Match;
+        return {
+            ...attendanceStats,
+            lowestMatch,
+            highestMatch
+        };
+    }
+
+    getRefereeStats(): RefereeStats[] {
+        const refereeStats = db.prepare(`
+            SELECT referee, COUNT(*) AS matches FROM matches
+            GROUP BY referee
+            ORDER BY matches DESC
+            `).all() as RefereeStats[];
+        return refereeStats;
     }
 }

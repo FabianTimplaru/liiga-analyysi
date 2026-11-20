@@ -1,9 +1,13 @@
 import express, { Express, Request, Response } from 'express';
 import { SqliteMatchReader } from './readers/SqliteMatchReader';
+import cors from 'cors';
 
 // Start the Express server
 const PORT = 3000;
 const app: Express = express();
+
+// Enable CORS for requests from the wanted origin
+app.use(cors({ origin: 'http://localhost:5173' }));
 
 // Create an instance of SqliteMatchReader
 const instance = new SqliteMatchReader();
@@ -43,6 +47,19 @@ app.get('/api/teams', (req: Request, res: Response) => {
 app.get('/api/stats/wins', (req: Request, res: Response) => {
     const teamWins = instance.getTeamWins();
     res.status(200).json(teamWins);
+});
+
+// GET attendance stats: min, max, avg
+app.get('/api/stats/attendance', (req: Request, res: Response) => {
+    const attendanceStats = instance.getAttendanceStats();
+    attendanceStats ? res.status(200).json(attendanceStats)
+        : res.status(404).json({ description: "Attendance stats are missing" });
+});
+
+// GET referee stats
+app.get('/api/stats/referees', (req: Request, res: Response) => {
+    const refereeStats = instance.getRefereeStats();
+    res.status(200).json(refereeStats);
 });
 
 // Start the server

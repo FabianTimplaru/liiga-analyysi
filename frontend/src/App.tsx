@@ -4,6 +4,8 @@ import type { Match } from './types/Match';
 import { MatchCard } from './components/MatchCard';
 import type { TeamWins } from './types/TeamWins';
 import { TeamWinsList } from './components/TeamWinsList';
+import type { AttendanceStats } from './types/AttendanceStats';
+import { AttendanceStatsCard } from './components/AttendanceStatsCard';
 
 function App() {
   // State variables
@@ -12,6 +14,7 @@ function App() {
   const [teams, setTeams] = useState<string[]>([]);
   const [matchLocation, setMatchLocation] = useState<string>("all");
   const [teamWins, setTeamWins] = useState<TeamWins[]>([]);
+  const [attendanceStats, setAttendanceStats] = useState<AttendanceStats | null>(null);
 
   // Filter matches based on selected team and match location
   const filteredMatches = matches.filter((match) => {
@@ -51,9 +54,15 @@ function App() {
       const teamWinsData: TeamWins[] = await response.json();
       setTeamWins(teamWinsData);
     }
+    async function fetchAttendanceStats() {
+      const response: Response = await fetch('http://localhost:3000/api/stats/attendance');
+      const attendanceStatsData = await response.json();
+      setAttendanceStats(attendanceStatsData);
+    }
     fetchMatches();
     fetchTeams();
     fetchTeamWins();
+    fetchAttendanceStats();
   }, []);
 
 
@@ -93,6 +102,7 @@ function App() {
           ))}
         </div>
         <TeamWinsList teamWins={filteredTeamWins} />
+        {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />}
       </section>
 
     </main >

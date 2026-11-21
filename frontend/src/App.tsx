@@ -2,6 +2,8 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import type { Match } from './types/Match';
 import { MatchCard } from './components/MatchCard';
+import type { TeamWins } from './types/TeamWins';
+import { TeamWinsList } from './components/TeamWinsList';
 
 function App() {
   // State variables
@@ -9,6 +11,7 @@ function App() {
   const [selectedTeam, setSelectedTeam] = useState<string>("all");
   const [teams, setTeams] = useState<string[]>([]);
   const [matchLocation, setMatchLocation] = useState<string>("all");
+  const [teamWins, setTeamWins] = useState<TeamWins[]>([]);
 
   // Filter matches based on selected team and match location
   const filteredMatches = matches.filter((match) => {
@@ -20,6 +23,14 @@ function App() {
       return match.away_team === selectedTeam;
     } else {
       return match.home_team === selectedTeam || match.away_team === selectedTeam;
+    }
+  });
+
+  const filteredTeamWins = teamWins.filter((teamWin) => {
+    if (selectedTeam === "all") {
+      return true;
+    } else {
+      return teamWin.team === selectedTeam;
     }
   });
 
@@ -35,8 +46,14 @@ function App() {
       const teamData: string[] = await response.json();
       setTeams(teamData);
     }
+    async function fetchTeamWins() {
+      const response: Response = await fetch('http://localhost:3000/api/stats/wins');
+      const teamWinsData: TeamWins[] = await response.json();
+      setTeamWins(teamWinsData);
+    }
     fetchMatches();
     fetchTeams();
+    fetchTeamWins();
   }, []);
 
 
@@ -48,7 +65,7 @@ function App() {
           <p>
             Liiga-kauden 2025-2026 ottelut ja tilastot
           </p>
-          <p>Total matches: {matches.length}</p>
+          <p>Ottelut:{filteredMatches.length} / {matches.length}</p>
         </div>
         <select value={selectedTeam} onChange={(e) => {
           setSelectedTeam(e.target.value);
@@ -75,6 +92,7 @@ function App() {
             <MatchCard key={match.id} match={match} />
           ))}
         </div>
+        <TeamWinsList teamWins={filteredTeamWins} />
       </section>
 
     </main >

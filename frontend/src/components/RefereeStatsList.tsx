@@ -6,7 +6,7 @@ interface RefereeStatsProps {
 
 export function RefereeStatsList({ refereeStats }: RefereeStatsProps) {
     return (
-        <div>
+        <div className="stats-referees">
             <h2>Tuomaritilastot</h2>
             {refereeStats.map((stats) => (
                 <div key={stats.referee}>

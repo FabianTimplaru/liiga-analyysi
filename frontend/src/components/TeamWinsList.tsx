@@ -6,7 +6,7 @@ interface TeamWinsListProps {
 
 export function TeamWinsList({ teamWins }: TeamWinsListProps) {
     return (
-        <div>
+        <div className="stats-wins">
             <h2>Joukkueiden voitot</h2>
             {teamWins.map((teamWin) => (
                 <div key={teamWin.team}>

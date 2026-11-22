@@ -18,6 +18,7 @@ function App() {
   const [teamWins, setTeamWins] = useState<TeamWins[]>([]);
   const [attendanceStats, setAttendanceStats] = useState<AttendanceStats | null>(null);
   const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
+  const [activeView, setActiveView] = useState<string>("matches");
 
   // Filter matches based on selected team and match location
   const filteredMatches = matches.filter((match) => {
@@ -84,39 +85,59 @@ function App() {
       <section id="center">
         <div>
           <h1>Liiga-analyysi</h1>
+          <button
+            id='matches'
+            className={activeView === "matches" ? "active" : ""}
+            onClick={() => setActiveView("matches")}>
+            Ottelut
+          </button>
+          <button
+            id='stats'
+            className={activeView === "stats" ? "active" : ""}
+            onClick={() => setActiveView("stats")}>
+            Tilastot
+          </button>
           <p>
             Liiga-kauden 2025-2026 ottelut ja tilastot
           </p>
+        </div>
+
+        {/* Display matches view */}
+        {activeView === "matches" && (<>
           <p>Ottelut:{filteredMatches.length} / {matches.length}</p>
-        </div>
-        <select value={selectedTeam} onChange={(e) => {
-          setSelectedTeam(e.target.value);
-          setMatchLocation("all"); // Reset match location when team changes
-        }}>
-          <option value="all">Kaikki joukkueet</option>
-          {teams.map((team) => (
-            <option key={team} value={team}>
-              {team}
-            </option>
-          ))}
-        </select>
-        <select
-          value={matchLocation}
-          onChange={(e) => setMatchLocation(e.target.value)}
-          disabled={selectedTeam === "all"}
-        >
-          <option value="all">Kaikki</option>
-          <option value="home">Kotiottelut</option>
-          <option value="away">Vierasottelut</option>
-        </select>
-        <div className="match">
-          {filteredMatches.map((match) => (
-            <MatchCard key={match.id} match={match} />
-          ))}
-        </div>
-        <TeamWinsList teamWins={filteredTeamWins} />
-        {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />}
-        <RefereeStatsList refereeStats={refereeStats} />
+          <select value={selectedTeam} onChange={(e) => {
+            setSelectedTeam(e.target.value);
+            setMatchLocation("all"); // Reset match location when team changes
+          }}>
+            <option value="all">Kaikki joukkueet</option>
+            {teams.map((team) => (
+              <option key={team} value={team}>
+                {team}
+              </option>
+            ))}
+          </select>
+          <select
+            value={matchLocation}
+            onChange={(e) => setMatchLocation(e.target.value)}
+            disabled={selectedTeam === "all"}
+          >
+            <option value="all">Kaikki</option>
+            <option value="home">Kotiottelut</option>
+            <option value="away">Vierasottelut</option>
+          </select>
+          <div className="match">
+            {filteredMatches.map((match) => (
+              <MatchCard key={match.id} match={match} />
+            ))}
+          </div>
+        </>)}
+
+        {/* Display statistics view */}
+        {activeView === "stats" && (<div className='stats-grid'>
+          {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />}
+          <TeamWinsList teamWins={filteredTeamWins} />
+          <RefereeStatsList refereeStats={refereeStats} />
+        </div>)}
       </section>
 
     </main >

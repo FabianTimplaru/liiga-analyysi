@@ -6,7 +6,8 @@ interface AttendanceStatsProps {
 
 export function AttendanceStatsCard({ attendanceStats }: AttendanceStatsProps) {
     return (
-        <div>
+        <div className="stats-attendance">
+            <h2>Yleisötilastot</h2>
             <p>Keskimääräinen yleisömäärä: {attendanceStats.average.toLocaleString("fi-FI")}</p>
             <p>Pienin yleisömäärä: {attendanceStats.lowest.toLocaleString("fi-FI")}</p>
             <p>Ottelu:{" "}
@@ -15,6 +16,7 @@ export function AttendanceStatsCard({ attendanceStats }: AttendanceStatsProps) {
                 {attendanceStats.lowestMatch.home_goals} - {attendanceStats.lowestMatch.away_goals} {" "}
                 {attendanceStats.lowestMatch.away_team}
             </p>
+
             <p>Suurin yleisömäärä: {attendanceStats.highest.toLocaleString("fi-FI")}</p>
             <p>
                 Ottelu:{" "}

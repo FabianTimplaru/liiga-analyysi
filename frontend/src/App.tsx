@@ -6,6 +6,8 @@ import type { TeamWins } from './types/TeamWins';
 import { TeamWinsList } from './components/TeamWinsList';
 import type { AttendanceStats } from './types/AttendanceStats';
 import { AttendanceStatsCard } from './components/AttendanceStatsCard';
+import type { RefereeStats } from './types/RefereeStats';
+import { RefereeStatsList } from './components/RefereeStatsList';
 
 function App() {
   // State variables
@@ -15,6 +17,7 @@ function App() {
   const [matchLocation, setMatchLocation] = useState<string>("all");
   const [teamWins, setTeamWins] = useState<TeamWins[]>([]);
   const [attendanceStats, setAttendanceStats] = useState<AttendanceStats | null>(null);
+  const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
 
   // Filter matches based on selected team and match location
   const filteredMatches = matches.filter((match) => {
@@ -29,6 +32,7 @@ function App() {
     }
   });
 
+  // Filter team wins based on selected team
   const filteredTeamWins = teamWins.filter((teamWin) => {
     if (selectedTeam === "all") {
       return true;
@@ -56,13 +60,22 @@ function App() {
     }
     async function fetchAttendanceStats() {
       const response: Response = await fetch('http://localhost:3000/api/stats/attendance');
-      const attendanceStatsData = await response.json();
+      if (!response.ok) {
+        return;
+      }
+      const attendanceStatsData: AttendanceStats = await response.json();
       setAttendanceStats(attendanceStatsData);
+    }
+    async function fetchRefereeStats() {
+      const response: Response = await fetch('http://localhost:3000/api/stats/referees');
+      const refereeStatsData: RefereeStats[] = await response.json();
+      setRefereeStats(refereeStatsData);
     }
     fetchMatches();
     fetchTeams();
     fetchTeamWins();
     fetchAttendanceStats();
+    fetchRefereeStats();
   }, []);
 
 
@@ -103,6 +116,7 @@ function App() {
         </div>
         <TeamWinsList teamWins={filteredTeamWins} />
         {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />}
+        <RefereeStatsList refereeStats={refereeStats} />
       </section>
 
     </main >

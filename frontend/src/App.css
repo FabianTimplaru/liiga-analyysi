@@ -63,3 +63,20 @@ button.active {
   border-radius: 8px;
   background-color: var(--accent-bg);
 }
+
+.stats-wins table,
+.stats-referees table {
+  width: 100%;
+  border-collapse: collapse;
+
+  & th,
+  & td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid black;
+
+    &:nth-child(3) {
+      text-align: right;
+    }
+  }
+}

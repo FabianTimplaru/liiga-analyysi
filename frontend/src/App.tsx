@@ -33,15 +33,6 @@ function App() {
     }
   });
 
-  // Filter team wins based on selected team
-  const filteredTeamWins = teamWins.filter((teamWin) => {
-    if (selectedTeam === "all") {
-      return true;
-    } else {
-      return teamWin.team === selectedTeam;
-    }
-  });
-
   // Fetch matches and teams data from the backend API
   useEffect(() => {
     async function fetchMatches() {
@@ -135,7 +126,7 @@ function App() {
         {/* Display statistics view */}
         {activeView === "stats" && (<div className='stats-grid'>
           {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />}
-          <TeamWinsList teamWins={filteredTeamWins} />
+          <TeamWinsList teamWins={teamWins} />
           <RefereeStatsList refereeStats={refereeStats} />
         </div>)}
       </section>

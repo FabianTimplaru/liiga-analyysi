@@ -8,11 +8,25 @@ export function RefereeStatsList({ refereeStats }: RefereeStatsProps) {
     return (
         <div className="stats-referees">
             <h2>Tuomaritilastot</h2>
-            {refereeStats.map((stats) => (
-                <div key={stats.referee}>
-                    <p>Tuomari {stats.referee}: {stats.matches} ottelua.</p>
-                </div>
-            ))}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sija</th>
+                        <th>Nimi</th>
+                        <th>Ottelut</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {refereeStats.map((stats, index) => (
+                        <tr key={stats.referee}>
+                            <td>{index + 1}</td>
+                            <td>{stats.referee}</td>
+                            <td>{stats.matches}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }

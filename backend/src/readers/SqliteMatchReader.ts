@@ -4,6 +4,7 @@ import { db } from '../db/database';
 import type { TeamWins } from '../models/TeamWins';
 import { AttendanceStats } from '../models/AttendanceStats';
 import { RefereeStats } from '../models/RefereeStats';
+import { TeamStandings } from '../models/TeamStandings';
 
 export class SqliteMatchReader implements MatchReader {
     getAllMatches(): Match[] {
@@ -40,6 +41,37 @@ export class SqliteMatchReader implements MatchReader {
             ORDER BY wins DESC
             `).all() as TeamWins[];
         return teamWins;
+    }
+
+    getTeamStandings(): TeamStandings[] {
+        const teamStandings = db.prepare(`
+            SELECT
+            team, COUNT(*) AS matches,
+            SUM(regulationWins) AS regulationWins,
+            SUM(overtimeWins) AS overtimeWins,
+            SUM(regulationLosses) AS regulationLosses,
+            SUM(overtimeLosses) AS overtimeLosses,
+            SUM(goalsFor) AS goalsFor,
+            SUM(goalsAgainst) AS goalsAgainst,
+            SUM(regulationWins) * 3 + SUM(overtimeWins) * 2 + SUM(overtimeLosses) AS points
+            FROM 
+            (SELECT home_team AS team, home_goals AS goalsFor, away_goals AS goalsAgainst,
+            CASE WHEN result ='K' THEN 1 ELSE 0 END AS regulationWins,
+            CASE WHEN result IN ('KJ', 'RLK') THEN 1 ELSE 0 END AS overtimeWins,
+            CASE WHEN result = 'V' THEN 1 ELSE 0 END AS regulationLosses,
+            CASE WHEN result IN ('VJ','RLV') THEN 1 ELSE 0 END AS overtimeLosses
+            FROM matches
+            UNION ALL
+            SELECT away_team AS team, away_goals AS goalsFor, home_goals AS goalsAgainst,
+            CASE WHEN result = 'V' THEN 1 ELSE 0 END AS regulationWins,
+            CASE WHEN result IN ('VJ','RLV') THEN 1 ELSE 0 END AS overtimeWins,
+            CASE WHEN result = 'K' THEN 1 ELSE 0 END AS regulationLosses,
+            CASE WHEN result IN ('KJ','RLK') THEN 1 ELSE 0 END AS overtimeLosses
+            FROM matches) AS combined
+            GROUP BY team
+            ORDER BY points DESC,regulationWins DESC, SUM(goalsFor) - SUM(goalsAgainst) DESC, goalsFor DESC
+            `).all() as TeamStandings[];
+        return teamStandings;
     }
 
     getAttendanceStats(): AttendanceStats | undefined {

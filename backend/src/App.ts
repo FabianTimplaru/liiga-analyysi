@@ -49,6 +49,12 @@ app.get('/api/stats/wins', (req: Request, res: Response) => {
     res.status(200).json(teamWins);
 });
 
+// GET team standings
+app.get('/api/stats/standings', (req: Request, res: Response) => {
+    const teamStandings = instance.getTeamStandings();
+    res.status(200).json(teamStandings);
+});
+
 // GET attendance stats: min, max, avg
 app.get('/api/stats/attendance', (req: Request, res: Response) => {
     const attendanceStats = instance.getAttendanceStats();

@@ -2,12 +2,12 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import type { Match } from './types/Match';
 import { MatchCard } from './components/MatchCard';
-import type { TeamWins } from './types/TeamWins';
-import { TeamWinsList } from './components/TeamWinsList';
-import type { AttendanceStats } from './types/AttendanceStats';
-import { AttendanceStatsCard } from './components/AttendanceStatsCard';
+// import type { AttendanceStats } from './types/AttendanceStats';
+// import { AttendanceStatsCard } from './components/AttendanceStatsCard';
 import type { RefereeStats } from './types/RefereeStats';
 import { RefereeStatsList } from './components/RefereeStatsList';
+import type { TeamStandings } from './types/TeamStandings';
+import { TeamStandingsList } from './components/TeamStandings';
 
 function App() {
   // State variables
@@ -15,10 +15,11 @@ function App() {
   const [selectedTeam, setSelectedTeam] = useState<string>("all");
   const [teams, setTeams] = useState<string[]>([]);
   const [matchLocation, setMatchLocation] = useState<string>("all");
-  const [teamWins, setTeamWins] = useState<TeamWins[]>([]);
-  const [attendanceStats, setAttendanceStats] = useState<AttendanceStats | null>(null);
+  const [teamStandings, setTeamStandings] = useState<TeamStandings[]>([]);
+  // const [attendanceStats, setAttendanceStats] = useState<AttendanceStats | null>(null);
   const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
   const [activeView, setActiveView] = useState<string>("matches");
+  const [activeStatsView, setActiveStatsView] = useState<string>("standings");
 
   // Filter matches based on selected team and match location
   const filteredMatches = matches.filter((match) => {
@@ -45,19 +46,19 @@ function App() {
       const teamData: string[] = await response.json();
       setTeams(teamData);
     }
-    async function fetchTeamWins() {
-      const response: Response = await fetch('http://localhost:3000/api/stats/wins');
-      const teamWinsData: TeamWins[] = await response.json();
-      setTeamWins(teamWinsData);
+    async function fetchTeamStandings() {
+      const response: Response = await fetch('http://localhost:3000/api/stats/standings');
+      const teamStandingsData: TeamStandings[] = await response.json();
+      setTeamStandings(teamStandingsData);
     }
-    async function fetchAttendanceStats() {
-      const response: Response = await fetch('http://localhost:3000/api/stats/attendance');
-      if (!response.ok) {
-        return;
-      }
-      const attendanceStatsData: AttendanceStats = await response.json();
-      setAttendanceStats(attendanceStatsData);
-    }
+    // async function fetchAttendanceStats() {
+    //   const response: Response = await fetch('http://localhost:3000/api/stats/attendance');
+    //   if (!response.ok) {
+    //     return;
+    //   }
+    //   const attendanceStatsData: AttendanceStats = await response.json();
+    //   setAttendanceStats(attendanceStatsData);
+    // }
     async function fetchRefereeStats() {
       const response: Response = await fetch('http://localhost:3000/api/stats/referees');
       const refereeStatsData: RefereeStats[] = await response.json();
@@ -65,8 +66,8 @@ function App() {
     }
     fetchMatches();
     fetchTeams();
-    fetchTeamWins();
-    fetchAttendanceStats();
+    fetchTeamStandings();
+    // fetchAttendanceStats();
     fetchRefereeStats();
   }, []);
 
@@ -125,9 +126,27 @@ function App() {
 
         {/* Display statistics view */}
         {activeView === "stats" && (<div className='stats-grid'>
-          {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />}
-          <TeamWinsList teamWins={teamWins} />
-          <RefereeStatsList refereeStats={refereeStats} />
+          <nav className="stats-nav">
+            <button
+              onClick={() => setActiveStatsView("standings")}
+              className={activeStatsView === "standings" ? "active" : ""}>
+              Sarjataulukko
+            </button>
+            <button
+              onClick={() => setActiveStatsView("referees")}
+              className={activeStatsView === "referees" ? "active" : ""}>
+              Tuomaritilastot
+            </button>
+            <button
+              onClick={() => setActiveStatsView("teams")}
+              className={activeStatsView === "teams" ? "active" : ""}>
+              Joukkueet
+            </button>
+          </nav>
+          {/* {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />} */}
+          {activeStatsView === "standings" && <TeamStandingsList teamStandings={teamStandings} />}
+          {activeStatsView === "referees" && <RefereeStatsList refereeStats={refereeStats} />}
+          {activeStatsView === "teams" && <p>Tulossa myöhemmin</p>}
         </div>)}
       </section>
 

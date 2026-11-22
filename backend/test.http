@@ -18,6 +18,9 @@ GET {{baseUrl}}/api/teams
 ### Get wins by team in descending order
 GET {{baseUrl}}/api/stats/wins
 
+### Get team standings
+GET {{baseUrl}}/api/stats/standings
+
 ### Get attendance stats
 GET {{baseUrl}}/api/stats/attendance
 

@@ -8,6 +8,15 @@ import type { TeamStandings } from './types/TeamStandings';
 import { TeamStandingsList } from './components/TeamStandings';
 import { TeamStatsModal } from './components/TeamStatsModal';
 
+const formatMatchDate = (date: string): string => {
+  return new Intl.DateTimeFormat('fi-FI', {
+    weekday: 'short',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).format(new Date(date)).toUpperCase();
+};
+
 function App() {
   // State variables
   const [matches, setMatches] = useState<Match[]>([]);
@@ -32,6 +41,18 @@ function App() {
       return match.home_team === selectedTeam || match.away_team === selectedTeam;
     }
   });
+
+  const sortedMatches = [...filteredMatches].sort((a, b) =>
+    b.date.localeCompare(a.date)
+  );
+
+  const matchesByDate = sortedMatches.reduce<Record<string, Match[]>>((acc, match) => {
+    if (!acc[match.date]) {
+      acc[match.date] = [];
+    }
+    acc[match.date].push(match);
+    return acc;
+  }, {});
 
   // Fetch matches and teams data from the backend API
   useEffect(() => {
@@ -86,30 +107,38 @@ function App() {
 
         {/* Display matches view */}
         {activeView === "matches" && (<>
-          <p>Ottelut:{filteredMatches.length} / {matches.length}</p>
-          <select value={selectedTeam} onChange={(e) => {
-            setSelectedTeam(e.target.value);
-            setMatchLocation("all"); // Reset match location when team changes
-          }}>
-            <option value="all">Kaikki joukkueet</option>
-            {teams.map((team) => (
-              <option key={team} value={team}>
-                {team}
-              </option>
-            ))}
-          </select>
-          <select
-            value={matchLocation}
-            onChange={(e) => setMatchLocation(e.target.value)}
-            disabled={selectedTeam === "all"}
-          >
-            <option value="all">Kaikki</option>
-            <option value="home">Kotiottelut</option>
-            <option value="away">Vierasottelut</option>
-          </select>
+          <div className='matches-toolbar'>
+            <select value={selectedTeam} onChange={(e) => {
+              setSelectedTeam(e.target.value);
+              setMatchLocation("all"); // Reset match location when team changes
+            }}>
+              <option value="all">Kaikki joukkueet</option>
+              {teams.map((team) => (
+                <option key={team} value={team}>
+                  {team}
+                </option>
+              ))}
+            </select>
+            <select
+              value={matchLocation}
+              onChange={(e) => setMatchLocation(e.target.value)}
+              disabled={selectedTeam === "all"}
+            >
+              <option value="all">Kaikki</option>
+              <option value="home">Kotiottelut</option>
+              <option value="away">Vierasottelut</option>
+            </select>
+            <p>Ottelut: {filteredMatches.length} / {matches.length}</p>
+          </div>
+
           <div className="match">
-            {filteredMatches.map((match) => (
-              <MatchCard key={match.id} match={match} />
+            {Object.entries(matchesByDate).map(([date, matches]) => (
+              <div key={date} className='match-date-group'>
+                <h2 className='match-header'>{formatMatchDate(date)}</h2>
+                {matches.map((match) => (
+                  <MatchCard key={match.id} match={match} />
+                ))}
+              </div>
             ))}
           </div>
         </>)}

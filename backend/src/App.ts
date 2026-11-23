@@ -43,10 +43,10 @@ app.get('/api/teams', (req: Request, res: Response) => {
     res.status(200).json(teams);
 });
 
-// GET wins by team in descending order
-app.get('/api/stats/wins', (req: Request, res: Response) => {
-    const teamWins = instance.getTeamWins();
-    res.status(200).json(teamWins);
+// GET team standings
+app.get('/api/stats/standings', (req: Request, res: Response) => {
+    const teamStandings = instance.getTeamStandings();
+    res.status(200).json(teamStandings);
 });
 
 // GET attendance stats: min, max, avg

@@ -7,7 +7,6 @@ interface RefereeStatsProps {
 export function RefereeStatsList({ refereeStats }: RefereeStatsProps) {
     return (
         <div className="stats-referees">
-            <h2>Tuomaritilastot</h2>
             <table>
                 <thead>
                     <tr>

@@ -56,16 +56,19 @@ button.active {
 
 .stats-nav button {
   background-color: transparent;
+  font-size: 18px;
   border: none;
   border-bottom: 3px solid transparent;
-  border-radius: 0;
-  padding: 12px 16px;
+  border-right: 3px solid transparent;
+  border-radius: 0 0 10px 0;
+  padding: 16px 24px;
   cursor: pointer;
 
   &.active {
     background-color: transparent;
     color: #2563eb;
     border-bottom: 3px solid #2563eb;
+    border-right: 3px solid #2563eb
   }
 }
 
@@ -88,6 +91,13 @@ button.active {
         top: 0;
         background-color: var(--bg);
         z-index: 1;
+      }
+
+      & tbody tr {
+        &:hover {
+          background-color: rgba(37, 99, 235, 0.12);
+          transition: background-color 0.2s;
+        }
       }
 
       & th,

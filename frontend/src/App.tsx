@@ -2,8 +2,6 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import type { Match } from './types/Match';
 import { MatchCard } from './components/MatchCard';
-// import type { AttendanceStats } from './types/AttendanceStats';
-// import { AttendanceStatsCard } from './components/AttendanceStatsCard';
 import type { RefereeStats } from './types/RefereeStats';
 import { RefereeStatsList } from './components/RefereeStatsList';
 import type { TeamStandings } from './types/TeamStandings';
@@ -16,7 +14,6 @@ function App() {
   const [teams, setTeams] = useState<string[]>([]);
   const [matchLocation, setMatchLocation] = useState<string>("all");
   const [teamStandings, setTeamStandings] = useState<TeamStandings[]>([]);
-  // const [attendanceStats, setAttendanceStats] = useState<AttendanceStats | null>(null);
   const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
   const [activeView, setActiveView] = useState<string>("matches");
   const [activeStatsView, setActiveStatsView] = useState<string>("standings");
@@ -51,14 +48,6 @@ function App() {
       const teamStandingsData: TeamStandings[] = await response.json();
       setTeamStandings(teamStandingsData);
     }
-    // async function fetchAttendanceStats() {
-    //   const response: Response = await fetch('http://localhost:3000/api/stats/attendance');
-    //   if (!response.ok) {
-    //     return;
-    //   }
-    //   const attendanceStatsData: AttendanceStats = await response.json();
-    //   setAttendanceStats(attendanceStatsData);
-    // }
     async function fetchRefereeStats() {
       const response: Response = await fetch('http://localhost:3000/api/stats/referees');
       const refereeStatsData: RefereeStats[] = await response.json();
@@ -67,7 +56,6 @@ function App() {
     fetchMatches();
     fetchTeams();
     fetchTeamStandings();
-    // fetchAttendanceStats();
     fetchRefereeStats();
   }, []);
 
@@ -143,7 +131,6 @@ function App() {
               Joukkueet
             </button>
           </nav>
-          {/* {attendanceStats && <AttendanceStatsCard attendanceStats={attendanceStats} />} */}
           {activeStatsView === "standings" && <TeamStandingsList teamStandings={teamStandings} />}
           {activeStatsView === "referees" && <RefereeStatsList refereeStats={refereeStats} />}
           {activeStatsView === "teams" && <p>Tulossa myöhemmin</p>}

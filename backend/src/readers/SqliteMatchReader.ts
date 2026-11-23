@@ -1,7 +1,6 @@
 import type { MatchReader } from './MatchReader';
 import type { Match } from '../models/Match';
 import { db } from '../db/database';
-import type { TeamWins } from '../models/TeamWins';
 import { AttendanceStats } from '../models/AttendanceStats';
 import { RefereeStats } from '../models/RefereeStats';
 import { TeamStandings } from '../models/TeamStandings';
@@ -27,21 +26,6 @@ export class SqliteMatchReader implements MatchReader {
         return allTeams.map(teamObj => teamObj.team);
     }
 
-    getTeamWins(): TeamWins[] {
-        const teamWins = db.prepare(`
-            SELECT team, SUM(wins) AS wins FROM
-            (SELECT home_team AS team, COUNT(*) AS wins FROM matches
-            WHERE result in ('K', 'KJ', 'RLK')
-            GROUP BY home_team
-            UNION ALL
-            SELECT away_team AS team, COUNT(*) AS wins FROM matches
-            WHERE result in ('V', 'VJ', 'RLV')
-            GROUP BY away_team) AS combined
-            GROUP BY team
-            ORDER BY wins DESC
-            `).all() as TeamWins[];
-        return teamWins;
-    }
 
     getTeamStandings(): TeamStandings[] {
         const teamStandings = db.prepare(`

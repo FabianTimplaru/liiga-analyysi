@@ -99,10 +99,6 @@ button.active {
         &:nth-child(2) {
           text-align: left;
         }
-
-        &:last-child {
-          font-weight: 700;
-        }
       }
     }
   }
@@ -110,27 +106,21 @@ button.active {
 
 .stats-attendance {
   grid-column: 1/-1;
-}
-
-.stats-attendance,
-.stats-wins,
-.stats-referees {
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background-color: var(--accent-bg);
 }
 
-.stats-wins table,
 .stats-referees table {
   width: 100%;
   border-collapse: collapse;
 
   & th,
   & td {
-    padding: 8px;
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--border);
 
     &:nth-child(3) {
       text-align: right;

@@ -76,6 +76,21 @@ button.active {
   width: 100%;
   min-width: 0;
 
+  & .team-link {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+  }
+
   & .table-scroll {
     width: 100%;
     overflow-x: auto;
@@ -109,6 +124,10 @@ button.active {
         &:nth-child(2) {
           text-align: left;
         }
+
+        &:last-child {
+          font-weight: 700;
+        }
       }
     }
   }
@@ -135,5 +154,80 @@ button.active {
     &:nth-child(3) {
       text-align: right;
     }
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  & .team-modal {
+    background-color: var(--bg);
+    padding: 24px;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 1300px;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    & .team-modal-header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 24px;
+
+      & button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 28px;
+        line-height: 1;
+      }
+    }
+
+    & .team-modal-table {
+      width: 100%;
+      overflow-x: auto;
+
+      & .team-modal-stats {
+        min-width: 650px;
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 16px;
+
+        & th,
+        & td {
+          padding: 8px;
+          text-align: right;
+          border-bottom: 1px solid var(--border);
+          white-space: nowrap;
+
+          &:first-child {
+            text-align: left;
+          }
+
+          &:last-child {
+            font-weight: 700;
+          }
+        }
+      }
+    }
+
+    & .team-modal-graphs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+
+      @media (max-width: 700px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
   }
 }

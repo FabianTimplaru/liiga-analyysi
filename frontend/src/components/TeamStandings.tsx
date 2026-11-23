@@ -3,9 +3,10 @@ import type { TeamStandings } from "../types/TeamStandings";
 
 interface TeamStandingsProps {
     teamStandings: TeamStandings[];
+    onTeamSelect: (team: TeamStandings) => void;
 }
 
-export function TeamStandingsList({ teamStandings }: TeamStandingsProps) {
+export function TeamStandingsList({ teamStandings, onTeamSelect }: TeamStandingsProps) {
     const tableScrollRef = useRef<HTMLDivElement>(null);
     const tableHeaderRef = useRef<HTMLTableSectionElement>(null);
 
@@ -32,7 +33,6 @@ export function TeamStandingsList({ teamStandings }: TeamStandingsProps) {
 
     return (
         <div className="stats-standings">
-            <h2>Sarjataulukko</h2>
             <div className="table-scroll" ref={tableScrollRef}>
                 <table>
                     <thead ref={tableHeaderRef}>
@@ -54,7 +54,11 @@ export function TeamStandingsList({ teamStandings }: TeamStandingsProps) {
                         {teamStandings.map((standings, index) => (
                             <tr key={standings.team}>
                                 <td>{index + 1}</td>
-                                <td>{standings.team}</td>
+                                <td>
+                                    <button type="button" className="team-link" onClick={() => onTeamSelect(standings)}>
+                                        {standings.team}
+                                    </button>
+                                </td>
                                 <td>{standings.matches}</td>
                                 <td>{standings.regulationWins}</td>
                                 <td>{standings.overtimeWins}</td>

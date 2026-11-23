@@ -6,6 +6,7 @@ import type { RefereeStats } from './types/RefereeStats';
 import { RefereeStatsList } from './components/RefereeStatsList';
 import type { TeamStandings } from './types/TeamStandings';
 import { TeamStandingsList } from './components/TeamStandings';
+import { TeamStatsModal } from './components/TeamStatsModal';
 
 function App() {
   // State variables
@@ -17,6 +18,7 @@ function App() {
   const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
   const [activeView, setActiveView] = useState<string>("matches");
   const [activeStatsView, setActiveStatsView] = useState<string>("standings");
+  const [selectedStatsTeam, setSelectedStatsTeam] = useState<TeamStandings | null>(null);
 
   // Filter matches based on selected team and match location
   const filteredMatches = matches.filter((match) => {
@@ -125,17 +127,20 @@ function App() {
               className={activeStatsView === "referees" ? "active" : ""}>
               Tuomaritilastot
             </button>
-            <button
-              onClick={() => setActiveStatsView("teams")}
-              className={activeStatsView === "teams" ? "active" : ""}>
-              Joukkueet
-            </button>
           </nav>
-          {activeStatsView === "standings" && <TeamStandingsList teamStandings={teamStandings} />}
+          {activeStatsView === "standings" &&
+            <TeamStandingsList teamStandings={teamStandings} onTeamSelect={setSelectedStatsTeam} />}
           {activeStatsView === "referees" && <RefereeStatsList refereeStats={refereeStats} />}
-          {activeStatsView === "teams" && <p>Tulossa myöhemmin</p>}
         </div>)}
       </section>
+
+      {selectedStatsTeam && (
+        <TeamStatsModal
+          team={selectedStatsTeam}
+          onClose={() => setSelectedStatsTeam(null)}
+          matches={matches}
+        />
+      )}
 
     </main >
   );

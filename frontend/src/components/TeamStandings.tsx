@@ -16,8 +16,14 @@ export function TeamStandingsList({ teamStandings, onTeamSelect }: TeamStandings
         if (!tableScroll || !tableHeader) return;
 
         const updateHeaderTop = () => {
-            // Sticky positioning uses the horizontal scroller as its scrollport.
-            const top = Math.max(0, -tableScroll.getBoundingClientRect().top);
+            const statsNav = document.querySelector(".stats-nav");
+            const offset = statsNav?.getBoundingClientRect().bottom ?? 0;
+
+            const top = Math.max(
+                0,
+                offset - tableScroll.getBoundingClientRect().top
+            );
+
             tableHeader.style.top = `${top}px`;
         };
 

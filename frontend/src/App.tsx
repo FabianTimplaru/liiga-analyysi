@@ -7,6 +7,7 @@ import { RefereeStatsList } from './components/RefereeStatsList';
 import type { TeamStandings } from './types/TeamStandings';
 import { TeamStandingsList } from './components/TeamStandings';
 import { TeamStatsModal } from './components/TeamStatsModal';
+import { HomePage } from './components/HomePage';
 
 const formatMatchDate = (date: string): string => {
   return new Intl.DateTimeFormat('fi-FI', {
@@ -25,7 +26,7 @@ function App() {
   const [matchLocation, setMatchLocation] = useState<string>("all");
   const [teamStandings, setTeamStandings] = useState<TeamStandings[]>([]);
   const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
-  const [activeView, setActiveView] = useState<string>("matches");
+  const [activeView, setActiveView] = useState<string>("overview");
   const [activeStatsView, setActiveStatsView] = useState<string>("standings");
   const [selectedStatsTeam, setSelectedStatsTeam] = useState<TeamStandings | null>(null);
 
@@ -84,94 +85,115 @@ function App() {
 
 
   return (
-    <main>
-      <section id="center">
-        <div>
-          <h1>Liiga-analyysi</h1>
+    <>
+      <header className="main-header">
+        <nav className="main-nav">
+          <button className="nav-brand" onClick={() => setActiveView("overview")}>
+            Liiga
+          </button>
+          <button
+            id='overview'
+            className={activeView === "overview" ? "active" : ""}
+            onClick={() => setActiveView("overview")}>
+            Etusivu
+          </button>
+
           <button
             id='matches'
             className={activeView === "matches" ? "active" : ""}
             onClick={() => setActiveView("matches")}>
             Ottelut
           </button>
+
           <button
             id='stats'
             className={activeView === "stats" ? "active" : ""}
             onClick={() => setActiveView("stats")}>
             Tilastot
           </button>
-          <p>
-            Liiga-kauden 2025-2026 ottelut ja tilastot
-          </p>
-        </div>
+        </nav>
+      </header>
 
-        {/* Display matches view */}
-        {activeView === "matches" && (<>
-          <div className='matches-toolbar'>
-            <select value={selectedTeam} onChange={(e) => {
-              setSelectedTeam(e.target.value);
-              setMatchLocation("all"); // Reset match location when team changes
-            }}>
-              <option value="all">Kaikki joukkueet</option>
-              {teams.map((team) => (
-                <option key={team} value={team}>
-                  {team}
-                </option>
-              ))}
-            </select>
-            <select
-              value={matchLocation}
-              onChange={(e) => setMatchLocation(e.target.value)}
-              disabled={selectedTeam === "all"}
-            >
-              <option value="all">Kaikki</option>
-              <option value="home">Kotiottelut</option>
-              <option value="away">Vierasottelut</option>
-            </select>
-            <p>Ottelut: {filteredMatches.length} / {matches.length}</p>
-          </div>
+      <main>
+        <section id="center">
+          {/*Display homepage view*/}
+          {activeView === "overview" && (
+            <HomePage matches={matches}
+              teamStandings={teamStandings}
+              onTeamSelect={setSelectedStatsTeam} />)}
 
-          <div className="match">
-            {Object.entries(matchesByDate).map(([date, matches]) => (
-              <div key={date} className='match-date-group'>
-                <h2 className='match-header'>{formatMatchDate(date)}</h2>
-                {matches.map((match) => (
-                  <MatchCard key={match.id} match={match} />
+          {/* Display matches view */}
+          {activeView === "matches" && (<>
+            <div className='matches-toolbar'>
+              <select value={selectedTeam} onChange={(e) => {
+                setSelectedTeam(e.target.value);
+                setMatchLocation("all"); // Reset match location when team changes
+              }}>
+                <option value="all">Kaikki joukkueet</option>
+                {teams.map((team) => (
+                  <option key={team} value={team}>
+                    {team}
+                  </option>
                 ))}
-              </div>
-            ))}
-          </div>
-        </>)}
+              </select>
+              <select
+                value={matchLocation}
+                onChange={(e) => setMatchLocation(e.target.value)}
+                disabled={selectedTeam === "all"}
+              >
+                <option value="all">Kaikki</option>
+                <option value="home">Kotiottelut</option>
+                <option value="away">Vierasottelut</option>
+              </select>
+              <p>Ottelut: {filteredMatches.length} / {matches.length}</p>
+            </div>
 
-        {/* Display statistics view */}
-        {activeView === "stats" && (<div className='stats-grid'>
-          <nav className="stats-nav">
-            <button
-              onClick={() => setActiveStatsView("standings")}
-              className={activeStatsView === "standings" ? "active" : ""}>
-              Sarjataulukko
-            </button>
-            <button
-              onClick={() => setActiveStatsView("referees")}
-              className={activeStatsView === "referees" ? "active" : ""}>
-              Tuomaritilastot
-            </button>
-          </nav>
-          {activeStatsView === "standings" &&
-            <TeamStandingsList teamStandings={teamStandings} onTeamSelect={setSelectedStatsTeam} />}
-          {activeStatsView === "referees" && <RefereeStatsList refereeStats={refereeStats} />}
-        </div>)}
-      </section>
+            <div className="match">
+              {Object.entries(matchesByDate).map(([date, matches]) => (
+                <div key={date} className='match-date-group'>
+                  <h2 className='match-header'>{formatMatchDate(date)}</h2>
+                  {matches.map((match) => (
+                    <MatchCard key={match.id} match={match} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </>)}
 
-      {selectedStatsTeam && (
-        <TeamStatsModal
-          team={selectedStatsTeam}
-          onClose={() => setSelectedStatsTeam(null)}
-          matches={matches}
-        />
-      )}
+          {/* Display statistics view */}
+          {activeView === "stats" && (<div className='stats-grid'>
+            <nav className="stats-nav">
+              <button
+                onClick={() => setActiveStatsView("standings")}
+                className={activeStatsView === "standings" ? "active" : ""}>
+                Sarjataulukko
+              </button>
+              <button
+                onClick={() => setActiveStatsView("referees")}
+                className={activeStatsView === "referees" ? "active" : ""}>
+                Tuomaritilastot
+              </button>
+            </nav>
+            {activeStatsView === "standings" &&
+              <TeamStandingsList teamStandings={teamStandings} onTeamSelect={setSelectedStatsTeam} />}
+            {activeStatsView === "referees" && <RefereeStatsList refereeStats={refereeStats} />}
+          </div>)}
+        </section>
 
-    </main >
+        {selectedStatsTeam && (
+          <TeamStatsModal
+            team={selectedStatsTeam}
+            onClose={() => setSelectedStatsTeam(null)}
+            matches={matches}
+          />
+        )}
+      </main >
+      <footer className="main-footer">
+        <p>Liiga-analyysi</p>
+        <p>Liiga-kausi 2025-2026</p>
+        <p>Opiskelijaprojekti · Ei Liigan virallinen verkkosivusto</p>
+      </footer>
+    </>
   );
 }
 

@@ -3,6 +3,7 @@ import type { Match } from "../types/Match";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useEffect, useRef } from "react";
+import { getMatchPoints, formatDate } from "../utils/matchUtils";
 
 interface TeamStatsModalProps {
     team: TeamStandings;
@@ -11,11 +12,6 @@ interface TeamStatsModalProps {
 }
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
-
-const formatDate = (date: string): string => {
-    const [year, month, day] = date.split("-");
-    return `${day}.${month}.${year.slice(-2)}`;
-};
 
 export function TeamStatsModal({ team, onClose, matches }: TeamStatsModalProps) {
     const teamMatches: Match[] = matches.filter(
@@ -27,46 +23,9 @@ export function TeamStatsModal({ team, onClose, matches }: TeamStatsModalProps) 
     );
 
     const matchPoints: { date: string; pointsEarned: number; }[] = teamMatches.map((match) => {
-        let pointsEarned = 0;
-
-        if (match.home_team === team.team) {
-            switch (match.result) {
-                case 'K':
-                    pointsEarned = 3;
-                    break;
-                case 'KJ':
-                case 'RLK':
-                    pointsEarned = 2;
-                    break;
-                case 'VJ':
-                case 'RLV':
-                    pointsEarned = 1;
-                    break;
-                case 'V':
-                    pointsEarned = 0;
-                    break;
-            }
-        } else {
-            switch (match.result) {
-                case 'K':
-                    pointsEarned = 0;
-                    break;
-                case 'KJ':
-                case 'RLK':
-                    pointsEarned = 1;
-                    break;
-                case 'VJ':
-                case 'RLV':
-                    pointsEarned = 2;
-                    break;
-                case 'V':
-                    pointsEarned = 3;
-                    break;
-            }
-        }
         return {
             date: match.date,
-            pointsEarned: pointsEarned
+            pointsEarned: getMatchPoints(match, team.team)
         };
     });
 

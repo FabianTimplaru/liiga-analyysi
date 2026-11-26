@@ -7,6 +7,7 @@ import { RefereeStatsList } from './components/RefereeStatsList';
 import type { TeamStandings } from './types/TeamStandings';
 import { TeamStandingsList } from './components/TeamStandings';
 import { TeamStatsModal } from './components/TeamStatsModal';
+import { HomePage } from './components/HomePage';
 
 const formatMatchDate = (date: string): string => {
   return new Intl.DateTimeFormat('fi-FI', {
@@ -25,7 +26,7 @@ function App() {
   const [matchLocation, setMatchLocation] = useState<string>("all");
   const [teamStandings, setTeamStandings] = useState<TeamStandings[]>([]);
   const [refereeStats, setRefereeStats] = useState<RefereeStats[]>([]);
-  const [activeView, setActiveView] = useState<string>("matches");
+  const [activeView, setActiveView] = useState<string>("overview");
   const [activeStatsView, setActiveStatsView] = useState<string>("standings");
   const [selectedStatsTeam, setSelectedStatsTeam] = useState<TeamStandings | null>(null);
 
@@ -89,21 +90,32 @@ function App() {
         <div>
           <h1>Liiga-analyysi</h1>
           <button
+            id='overview'
+            className={activeView === "overview" ? "active" : ""}
+            onClick={() => setActiveView("overview")}>
+            Etusivu
+          </button>
+
+          <button
             id='matches'
             className={activeView === "matches" ? "active" : ""}
             onClick={() => setActiveView("matches")}>
             Ottelut
           </button>
+
           <button
             id='stats'
             className={activeView === "stats" ? "active" : ""}
             onClick={() => setActiveView("stats")}>
             Tilastot
           </button>
-          <p>
-            Liiga-kauden 2025-2026 ottelut ja tilastot
-          </p>
         </div>
+
+        {/*Display homepage view*/}
+        {activeView === "overview" && (
+          <HomePage matches={matches}
+            teamStandings={teamStandings}
+            onTeamSelect={setSelectedStatsTeam} />)}
 
         {/* Display matches view */}
         {activeView === "matches" && (<>

@@ -18,6 +18,83 @@ button.active {
   border-color: var(--primary-blue);
 }
 
+.homepage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 24px;
+
+  & .homepage-overview {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+
+    & .homepage-stat-card {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+
+      & p:first-child {
+        font-size: 16px;
+      }
+
+      & p:last-child {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-blue);
+      }
+    }
+
+    @media (max-width: 700px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  & .homepage-standings {
+    width: 100%;
+
+    & table {
+      width: 100%;
+      border-collapse: collapse;
+
+      & th,
+      & td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+
+        &:nth-child(2) {
+          text-align: left;
+        }
+      }
+
+      & td:last-child {
+        font-weight: 700;
+      }
+
+      & tbody {
+        & tr {
+          transition: background-color 0.2s;
+
+          &:nth-child(odd) {
+            background-color: var(--table-stripe-bg);
+          }
+
+          &:hover {
+            background-color: var(--hover-bg);
+          }
+        }
+      }
+    }
+  }
+
+  & .homepage-attendance {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 16px;
+  }
+}
+
 .matches-toolbar {
   display: flex;
   align-items: center;
@@ -164,24 +241,24 @@ button.active {
   }
 }
 
+.team-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    color: var(--primary-blue);
+    text-decoration: underline;
+  }
+}
+
 .stats-standings {
   width: 100%;
   min-width: 0;
-
-  & .team-link {
-    background: transparent;
-    border: none;
-    padding: 0;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-    text-align: left;
-
-    &:hover {
-      color: var(--primary-blue);
-      text-decoration: underline;
-    }
-  }
 
   & .table-scroll {
     width: 100%;

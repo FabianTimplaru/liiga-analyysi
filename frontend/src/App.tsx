@@ -55,25 +55,35 @@ function App() {
     return acc;
   }, {});
 
+  const handleTeamSelect = (teamName: string) => {
+    const team = teamStandings.find(
+      (entry) => entry.team === teamName
+    );
+
+    if (team) {
+      setSelectedStatsTeam(team);
+    }
+  };
+
   // Fetch matches and teams data from the backend API
   useEffect(() => {
     async function fetchMatches() {
-      const response: Response = await fetch('http://localhost:3000/api/matches');
+      const response: Response = await fetch('/api/matches');
       const matchesData: Match[] = await response.json();
       setMatches(matchesData);
     }
     async function fetchTeams() {
-      const response: Response = await fetch('http://localhost:3000/api/teams');
+      const response: Response = await fetch('/api/teams');
       const teamData: string[] = await response.json();
       setTeams(teamData);
     }
     async function fetchTeamStandings() {
-      const response: Response = await fetch('http://localhost:3000/api/stats/standings');
+      const response: Response = await fetch('/api/stats/standings');
       const teamStandingsData: TeamStandings[] = await response.json();
       setTeamStandings(teamStandingsData);
     }
     async function fetchRefereeStats() {
-      const response: Response = await fetch('http://localhost:3000/api/stats/referees');
+      const response: Response = await fetch('/api/stats/referees');
       const refereeStatsData: RefereeStats[] = await response.json();
       setRefereeStats(refereeStatsData);
     }
@@ -153,7 +163,7 @@ function App() {
                 <div key={date} className='match-date-group'>
                   <h2 className='match-header'>{formatMatchDate(date)}</h2>
                   {matches.map((match) => (
-                    <MatchCard key={match.id} match={match} />
+                    <MatchCard key={match.id} match={match} onTeamSelect={handleTeamSelect} />
                   ))}
                 </div>
               ))}
@@ -183,6 +193,9 @@ function App() {
         {selectedStatsTeam && (
           <TeamStatsModal
             team={selectedStatsTeam}
+            rank={teamStandings.findIndex(
+              (team) => team.team === selectedStatsTeam.team
+            ) + 1}
             onClose={() => setSelectedStatsTeam(null)}
             matches={matches}
           />

@@ -253,7 +253,7 @@ button.active {
 
 .match-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr) 100px;
+  grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr) 100px;
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid var(--border);
@@ -264,8 +264,15 @@ button.active {
     background-color: var(--hover-bg);
   }
 
-  &>p:first-child {
-    text-align: right;
+  & .home-team {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+
+    @media (max-width: 600px) {
+      gap: 8px;
+    }
   }
 
   &>div:nth-child(2) {
@@ -281,8 +288,15 @@ button.active {
     }
   }
 
-  &>p:nth-child(3) {
-    text-align: left;
+  & .away-team {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+
+    @media (max-width: 600px) {
+      gap: 8px;
+    }
   }
 
   &>p:nth-child(4) {
@@ -291,6 +305,10 @@ button.active {
     @media (max-width: 600px) {
       text-align: right;
     }
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr) 60px;
   }
 }
 
@@ -338,6 +356,39 @@ button.active {
   }
 }
 
+.team-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: transform 0.2s ease-in-out;
+
+  @media (max-width: 600px) {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@keyframes logo-wiggle {
+
+  0%,
+  100% {
+    transform: scale(1.25) rotate(0deg);
+  }
+
+  25% {
+    transform: scale(1.25) rotate(-12deg);
+  }
+
+  50% {
+    transform: scale(1.25) rotate(12deg);
+  }
+
+  75% {
+    transform: scale(1.25) rotate(-6deg);
+  }
+}
+
 .team-link {
   background: transparent;
   border: none;
@@ -346,10 +397,17 @@ button.active {
   font: inherit;
   cursor: pointer;
   text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
 
   &:hover {
     color: var(--primary-blue);
     text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    gap: 8px;
   }
 }
 
@@ -451,12 +509,20 @@ button.active {
 
   & .team-modal {
     background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90)),
+      url("/modal-bg/rink-desktop.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     padding: 24px;
     border-radius: 12px;
     width: 95%;
     max-width: 1300px;
     max-height: 95vh;
     overflow-y: auto;
+    overflow-x: hidden;
     box-sizing: border-box;
 
     & .team-modal-header {
@@ -476,10 +542,8 @@ button.active {
 
     & .team-modal-table {
       width: 100%;
-      overflow-x: auto;
 
       & .team-modal-stats {
-        min-width: 650px;
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 16px;
@@ -491,7 +555,7 @@ button.active {
           border-bottom: 1px solid var(--border);
           white-space: nowrap;
 
-          &:first-child {
+          &:nth-child(2) {
             text-align: left;
           }
 
@@ -499,6 +563,19 @@ button.active {
             font-weight: 700;
           }
         }
+
+        @media (max-width: 800px) {
+          & .desktop-only {
+            display: none;
+          }
+        }
+      }
+
+      @media (max-width: 700px) {
+        padding: 12px;
+
+        background-image: linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90)),
+          url("/modal-bg/rink-mobile.jpg");
       }
     }
 
@@ -507,11 +584,24 @@ button.active {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
 
+      &>div {
+        min-width: 0;
+      }
+
       @media (max-width: 700px) {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
+    & .team-name {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      @media (max-width: 600px) {
+        gap: 8px;
+      }
+    }
   }
 }
 
@@ -535,5 +625,19 @@ button.active {
   & p:last-child {
     font-size: 12px;
     color: #999;
+  }
+}
+
+.match-card:hover .team-logo,
+.stats-standings tbody tr:hover .team-logo,
+.homepage-standings tbody tr:hover .team-logo {
+  transform: scale(1.25);
+  animation: logo-wiggle 1s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-logo {
+    animation: none !important;
+    transition: none;
   }
 }

@@ -1,0 +1,18 @@
+export const teamLogos: Record<string, string> = {
+    "Sport": "/teams/sport.svg",
+    "Pelicans": "/teams/pelicans.svg",
+    "Ässät": "/teams/assat.svg",
+    "HIFK": "/teams/hifk.svg",
+    "KalPa": "/teams/kalpa.svg",
+    "Kärpät": "/teams/karpat.svg",
+    "Tappara": "/teams/tappara.svg",
+    "Ilves": "/teams/ilves.svg",
+    "K-Espoo": "/teams/k-espoo.svg",
+    "JYP": "/teams/jyp.svg",
+    "Jukurit": "/teams/jukurit.svg",
+    "Lukko": "/teams/lukko.svg",
+    "HPK": "/teams/hpk.svg",
+    "SaiPa": "/teams/saipa.png",
+    "KooKoo": "/teams/kookoo.png",
+    "TPS": "/teams/tps.svg",
+};

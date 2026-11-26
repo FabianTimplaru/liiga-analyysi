@@ -2,6 +2,7 @@ import type { Match } from "../types/Match";
 import type { TeamStandings } from "../types/TeamStandings";
 import { LeagueAttendanceChart } from "./LeagueAttendanceChart";
 import { TopFivePointChart } from "./TopFivePointChart";
+import { TeamLogo } from "./TeamLogo";
 
 interface HomePageProps {
     matches: Match[];
@@ -32,7 +33,7 @@ export function HomePage({ matches, teamStandings, onTeamSelect }: HomePageProps
                     <p>{totalAttendance.toLocaleString("fi-FI")}</p>
                 </div>
                 <div className="homepage-stat-card">
-                    <p>Yleisökeskiarvo</p>
+                    <p>Yleisökeskiarvo / Ottelu</p>
                     <p>{averageAttendance.toLocaleString("fi-FI")}</p>
                 </div>
             </section>
@@ -55,6 +56,7 @@ export function HomePage({ matches, teamStandings, onTeamSelect }: HomePageProps
                                     <td>{index + 1}</td>
                                     <td>
                                         <button type="button" className="team-link" onClick={() => onTeamSelect(entry)}>
+                                            <TeamLogo team={entry.team} />
                                             {entry.team}
                                         </button>
                                     </td>

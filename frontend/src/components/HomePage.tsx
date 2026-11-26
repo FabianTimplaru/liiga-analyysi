@@ -1,6 +1,7 @@
 import type { Match } from "../types/Match";
 import type { TeamStandings } from "../types/TeamStandings";
 import { LeagueAttendanceChart } from "./LeagueAttendanceChart";
+import { TopFivePointChart } from "./TopFivePointChart";
 
 interface HomePageProps {
     matches: Match[];
@@ -36,32 +37,35 @@ export function HomePage({ matches, teamStandings, onTeamSelect }: HomePageProps
                 </div>
             </section>
 
-            <section className="homepage-standings">
-                <h2>Top 5</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Joukkue</th>
-                            <th>O</th>
-                            <th>P</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {topFiveTeams.map((entry, index) => (
-                            <tr key={entry.team}>
-                                <td>{index + 1}</td>
-                                <td>
-                                    <button type="button" className="team-link" onClick={() => onTeamSelect(entry)}>
-                                        {entry.team}
-                                    </button>
-                                </td>
-                                <td>{entry.matches}</td>
-                                <td>{entry.points}</td>
+            <section className="homepage-top-five">
+                <section className="homepage-standings">
+                    <h2>Top 5</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Joukkue</th>
+                                <th>O</th>
+                                <th>P</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {topFiveTeams.map((entry, index) => (
+                                <tr key={entry.team}>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                        <button type="button" className="team-link" onClick={() => onTeamSelect(entry)}>
+                                            {entry.team}
+                                        </button>
+                                    </td>
+                                    <td>{entry.matches}</td>
+                                    <td>{entry.points}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </section>
+                <TopFivePointChart matches={matches} topFiveTeams={topFiveTeams} />
             </section>
             <LeagueAttendanceChart matches={matches} />
 

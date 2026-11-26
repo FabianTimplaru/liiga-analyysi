@@ -1,21 +1,72 @@
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
 button.active {
   background-color: var(--primary-blue);
   color: white;
   border-color: var(--primary-blue);
+}
+
+.main-header {
+  width: 100%;
+  background-color: black;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  & .main-nav {
+    display: flex;
+    align-items: stretch;
+    min-height: 80px;
+    width: 100%;
+    max-width: 1126px;
+    margin: 0 auto;
+
+    & button {
+      background-color: transparent;
+      color: white;
+      border: 0;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 24px;
+      transition: background-color 0.2s;
+
+      &.active {
+        background-color: var(--toolbar-bg);
+      }
+
+      &:hover:not(.active) {
+        background-color: #252525;
+      }
+    }
+
+    & .nav-brand {
+      font-family: Impact, sans-serif;
+      font-size: 58px;
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: goldenrod;
+      margin-right: 24px;
+    }
+
+    @media (max-width: 600px) {
+      min-height: 60px;
+
+      & button {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 0 6px;
+        font-size: 12px;
+        box-sizing: border-box;
+      }
+
+      & .nav-brand {
+        flex: 0 0 auto;
+        font-size: 28px;
+        margin-right: 0;
+        padding: 0 10px;
+      }
+    }
+  }
 }
 
 .homepage {
@@ -23,6 +74,7 @@ button.active {
   flex-direction: column;
   width: 100%;
   gap: 24px;
+  min-width: 0;
 
   & .homepage-overview {
     display: grid;
@@ -33,6 +85,7 @@ button.active {
       padding: 16px;
       border: 1px solid var(--border);
       border-radius: 4px;
+      background-color: var(--bg);
 
       & p:first-child {
         font-size: 16px;
@@ -59,7 +112,7 @@ button.active {
 
       & th,
       & td {
-        padding: 12px;
+        padding: 12px 8px;
         border-bottom: 1px solid var(--border);
 
         &:nth-child(2) {
@@ -87,11 +140,43 @@ button.active {
     }
   }
 
-  & .homepage-attendance {
+  & .homepage-top-five {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: 24px;
+    width: 100%;
+    align-items: start;
+    box-sizing: border-box;
+
+    @media (max-width: 800px) {
+      grid-template-columns: minmax(0, 1fr);
+
+    }
+  }
+
+  & .homepage-attendance,
+  & .homepage-standings,
+  & .homepage-points {
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
     padding: 16px;
+  }
+
+  & .chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+
+    @media (max-width: 800px) {
+      height: 280px;
+    }
+  }
+
+  & .homepage-attendance .chart-container {
+    @media (max-width: 800px) {
+      height: 200px;
+    }
   }
 }
 
@@ -100,11 +185,12 @@ button.active {
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 8px;
+  padding: 8px 12px;
   flex-wrap: wrap;
   background-color: var(--toolbar-bg);
   color: white;
+  font-size: 14px;
 
   & p {
     margin-left: auto;
@@ -115,8 +201,8 @@ button.active {
     color: white;
     border: 1px solid white;
     border-radius: 4px;
-    padding: 12px 16px;
-    font-size: 18px;
+    padding: 8px 12px;
+    font-size: 14px;
     cursor: pointer;
 
     &:focus:not(:focus-visible) {
@@ -229,15 +315,26 @@ button.active {
 .stats-nav button {
   background-color: transparent;
   color: white;
-  font-size: 18px;
+  font-size: 14px;
   border: 1px solid white;
   border-radius: 4px;
-  padding: 16px 24px;
+  padding: 10px 16px;
   cursor: pointer;
 
   &.active {
     background-color: var(--primary-blue);
     color: white;
+  }
+}
+
+.matches-toolbar,
+.stats-nav {
+  position: sticky;
+  top: 80px;
+  z-index: 20;
+
+  @media (max-width: 600px) {
+    top: 60px;
   }
 }
 
@@ -415,5 +512,28 @@ button.active {
       }
     }
 
+  }
+}
+
+.main-footer {
+  background-color: black;
+  color: #ccc;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+
+  & p:first-child {
+    color: goldenrod;
+    font-size: 24px;
+    font-weight: 900;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  & p:last-child {
+    font-size: 12px;
+    color: #999;
   }
 }

@@ -32,43 +32,45 @@ export function LeagueAttendanceChart({ matches }: LeagueAttendanceChartProps) {
             borderColor: "#2563eb",
             borderWidth: 2,
             pointRadius: 0,
-            tension: 0.3
+            tension: 0.2
         }]
     };
     return (
         <section className="homepage-attendance">
             <h2>Liigan yleisömäärä</h2>
-            <Line data={chartData}
-                options={{
-                    aspectRatio: 3,
-                    responsive: true,
-                    locale: "fi-FI",
-                    interaction: {
-                        mode: "index",
-                        intersect: false
-                    },
-                    scales: {
-                        x: {
-                            ticks: { autoSkip: true, maxTicksLimit: 12 }
+            <div className="chart-container">
+                <Line data={chartData}
+                    options={{
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        locale: "fi-FI",
+                        interaction: {
+                            mode: "index",
+                            intersect: false
                         },
-                        y: {
-                            beginAtZero: false,
-                            grace: "10%"
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            enabled: true,
-                            displayColors: false,
-                            callbacks: {
-                                label: function (context) {
-                                    return `${(context.parsed.y)!.toLocaleString("fi-FI")} katsojaa`;
+                        scales: {
+                            x: {
+                                ticks: { autoSkip: true, maxTicksLimit: 12, maxRotation: 0, autoSkipPadding: 10 }
+                            },
+                            y: {
+                                beginAtZero: false,
+                                grace: "10%"
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                enabled: true,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function (context) {
+                                        return `${(context.parsed.y)!.toLocaleString("fi-FI")} katsojaa`;
+                                    }
                                 }
                             }
                         }
-                    }
-                }}></Line>
+                    }} />
+            </div>
         </section >
     );
 }

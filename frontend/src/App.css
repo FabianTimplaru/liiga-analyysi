@@ -142,10 +142,10 @@ button.active {
 
   & .homepage-top-five {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr);
     gap: 24px;
     width: 100%;
-    align-items: start;
+    align-items: stretch;
     box-sizing: border-box;
 
     @media (max-width: 800px) {
@@ -170,6 +170,17 @@ button.active {
 
     @media (max-width: 800px) {
       height: 280px;
+    }
+  }
+
+  & .homepage-points {
+    display: flex;
+    flex-direction: column;
+
+    & .chart-container {
+      flex: 1;
+      height: auto;
+      min-height: 300px;
     }
   }
 

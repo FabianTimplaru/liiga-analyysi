@@ -4,16 +4,18 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Line } from "react-chartjs-2";
 import { useEffect, useRef } from "react";
 import { getMatchPoints, formatDate } from "../utils/matchUtils";
+import { TeamLogo } from "./TeamLogo";
 
 interface TeamStatsModalProps {
     team: TeamStandings;
+    rank: number;
     matches: Match[];
     onClose: () => void;
 }
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
-export function TeamStatsModal({ team, onClose, matches }: TeamStatsModalProps) {
+export function TeamStatsModal({ team, rank, onClose, matches }: TeamStatsModalProps) {
     const teamMatches: Match[] = matches.filter(
         (match) => match.home_team === team.team || match.away_team === team.team
     ).sort((a, b) => a.date.localeCompare(b.date));
@@ -126,27 +128,34 @@ export function TeamStatsModal({ team, onClose, matches }: TeamStatsModalProps) 
                     <table className="team-modal-stats">
                         <thead>
                             <tr>
+                                <th>Sija</th>
                                 <th>Joukkue</th>
                                 <th>O</th>
-                                <th>V</th>
-                                <th>JV</th>
-                                <th>JH</th>
-                                <th>H</th>
-                                <th>TM</th>
-                                <th>PM</th>
+                                <th className="desktop-only">V</th>
+                                <th className="desktop-only">JV</th>
+                                <th className="desktop-only">JH</th>
+                                <th className="desktop-only">H</th>
+                                <th className="desktop-only">TM</th>
+                                <th className="desktop-only">PM</th>
                                 <th>P</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{team.team}</td>
+                                <td>{rank}</td>
+                                <td>
+                                    <div className="team-name">
+                                        <TeamLogo team={team.team} />
+                                        {team.team}
+                                    </div>
+                                </td>
                                 <td>{team.matches}</td>
-                                <td>{team.regulationWins}</td>
-                                <td>{team.overtimeWins}</td>
-                                <td>{team.overtimeLosses}</td>
-                                <td>{team.regulationLosses}</td>
-                                <td>{team.goalsFor}</td>
-                                <td>{team.goalsAgainst}</td>
+                                <td className="desktop-only">{team.regulationWins}</td>
+                                <td className="desktop-only">{team.overtimeWins}</td>
+                                <td className="desktop-only">{team.overtimeLosses}</td>
+                                <td className="desktop-only">{team.regulationLosses}</td>
+                                <td className="desktop-only">{team.goalsFor}</td>
+                                <td className="desktop-only">{team.goalsAgainst}</td>
                                 <td>{team.points}</td>
                             </tr>
                         </tbody>

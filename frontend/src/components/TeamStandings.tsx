@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import type { TeamStandings } from "../types/TeamStandings";
+import { TeamLogo } from "./TeamLogo";
 
 interface TeamStandingsProps {
     teamStandings: TeamStandings[];
@@ -62,6 +63,7 @@ export function TeamStandingsList({ teamStandings, onTeamSelect }: TeamStandings
                                 <td>{index + 1}</td>
                                 <td>
                                     <button type="button" className="team-link" onClick={() => onTeamSelect(standings)}>
+                                        <TeamLogo team={standings.team} />
                                         {standings.team}
                                     </button>
                                 </td>
